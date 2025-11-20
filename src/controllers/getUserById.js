@@ -15,6 +15,12 @@ class GetUserByIdController {
       const getUserByIdUseCase = new GetUserByIdUseCase();
       const user = await getUserByIdUseCase.execute(req.params.userId);
 
+      if (!user) {
+        return res.status(404).json({
+          errorMessage: "User not found.",
+        });
+      }
+
       return res.status(200).json(user);
     } catch (e) {
       console.error(e);

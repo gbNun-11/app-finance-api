@@ -1,11 +1,20 @@
 import crypto from "node:crypto";
 import bcrypt from "bcrypt";
 
-import { PostgressCreateUserRepository } from "../repositories/postgres/createUser.js";
+import { PostgresCreateUserRepository } from "../repositories/postgres/createUser.js";
+import { PostgresGetUserByEmailReposity } from "../repositories/postgres/getUserByEmail.js";
 
 export class CreateUserUseCase {
   async execute(createUserParams) {
-    // TODO: Verificar se o email já está em uso
+    const postgresGetUserByEmailRepository =
+      new PostgresGetUserByEmailReposity();
+    const userWithProvidedEmail =
+      await postgresGetUserByEmailRepository.execute(createUserParams.email);
+
+    if (userWithProvidedEmail) {
+      throw new Error("The provided E-mail is already in use");
+    }
+
     const userID = crypto.randomUUID();
 
     const hashedPassword = await bcrypt.hash(createUserParams.password, 10);
@@ -18,7 +27,7 @@ export class CreateUserUseCase {
       password: hashedPassword,
     };
 
-    const postgressCreateUserRepository = new PostgressCreateUserRepository();
+    const postgressCreateUserRepository = new PostgresCreateUserRepository();
     const createdUser = await postgressCreateUserRepository.execute(user);
 
     return createdUser;

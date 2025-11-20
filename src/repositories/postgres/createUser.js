@@ -1,11 +1,11 @@
-import { PostgresHelper } from "../../database/postgres/client";
+import { PostgresHelper } from "../../database/postgres/client.js";
 
 export class PostgressCreateUserRepository {
   async execute(createUserParams) {
     const results = await PostgresHelper.query(
-      "INSERT INTO users (ID, first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5",
+      "INSERT INTO users (id, first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [
-        createUserParams.ID,
+        createUserParams.id,
         createUserParams.first_name,
         createUserParams.last_name,
         createUserParams.email,
@@ -13,6 +13,6 @@ export class PostgressCreateUserRepository {
       ],
     );
 
-    return results[0];
+    return results.rows[0];
   }
 }

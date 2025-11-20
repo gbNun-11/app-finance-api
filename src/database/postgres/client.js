@@ -14,6 +14,6 @@ export const PostgresHelper = {
     const result = await client.query(query, params);
 
     await client.release();
-    return result.rows;
+    return result;
   },
 };

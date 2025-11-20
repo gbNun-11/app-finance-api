@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import bcrypt from "bcrypt";
 
-import { PostgressCreateUserRepository } from "../repositories/postgres/create-user.js";
+import { PostgressCreateUserRepository } from "../repositories/postgres/createUser.js";
 
 export class CreateUserUseCase {
   async execute(createUserParams) {
@@ -11,7 +11,9 @@ export class CreateUserUseCase {
     const hashedPassword = await bcrypt.hash(createUserParams.password, 10);
 
     const user = {
-      ...createUserParams,
+      first_name: createUserParams.first_name,
+      last_name: createUserParams.last_name,
+      email: createUserParams.email,
       id: userID,
       password: hashedPassword,
     };

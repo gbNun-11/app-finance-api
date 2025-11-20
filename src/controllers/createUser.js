@@ -1,6 +1,7 @@
 import validator from "validator";
 
 import { CreateUserUseCase } from "../use-cases/createUser.js";
+import { EmailAlreadyInUseError } from "../errors/user.js";
 
 class CreateUserController {
   async execute(req, res) {
@@ -33,6 +34,12 @@ class CreateUserController {
 
       return res.status(201).json(createdUser);
     } catch (e) {
+      if (e instanceof EmailAlreadyInUseError) {
+        return res.status(400).json({
+          errorMessage: e.message,
+        });
+      }
+
       console.error(e);
       return res.status(500).json({
         errorMessage: "Internal server error",

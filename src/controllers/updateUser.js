@@ -1,13 +1,14 @@
 import validator from "validator";
 import { EmailAlreadyInUseError } from "../errors/user.js";
 import { GetUserByIdUseCase } from "../use-cases/getUserById.js";
-import { UpdateUserUseCase } from "../use-cases/createUser.js";
+import { UpdateUserUseCase } from "../use-cases/updateUser.js";
 
 class UpdateUserController {
   async execute(req, res) {
     try {
+      const userId = req.params.userId;
       const updateUserParams = req.body;
-      const isIdValid = validator.isUUID(req.params.userId);
+      const isIdValid = validator.isUUID(userId);
 
       if (!isIdValid) {
         return res.status(400).json({
@@ -16,7 +17,7 @@ class UpdateUserController {
       }
 
       const getUserByIdUseCase = new GetUserByIdUseCase();
-      const user = await getUserByIdUseCase.execute(req.params.userId);
+      const user = await getUserByIdUseCase.execute(userId);
 
       if (!user) {
         return res.status(404).json({
@@ -29,7 +30,7 @@ class UpdateUserController {
         (field) => !requiredFields.includes(field),
       );
 
-      if (!someFieldIsNotAllowed) {
+      if (someFieldIsNotAllowed) {
         return res.status(400).json({
           errorMessage: "Some provided field is not allowed",
         });
@@ -53,7 +54,7 @@ class UpdateUserController {
 
       const updateUserUseCase = new UpdateUserUseCase();
       const updatedUser = await updateUserUseCase.execute(
-        user,
+        userId,
         updateUserParams,
       );
 

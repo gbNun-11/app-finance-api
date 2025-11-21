@@ -1,16 +1,17 @@
 import bcrypt from "bcrypt";
-
-import { PostgresGetUserByEmailReposity } from "../repositories/postgres/getUserByEmail.js";
-import { PostgresUpdateUserRepository } from "../repositories/postgres/updateUser.js";
 import { EmailAlreadyInUseError } from "../errors/user.js";
 
 export class UpdateUserUseCase {
+  constructor(postgresGetUserByEmailReposity, postgresUpdateUserRepository) {
+    this.postgresGetUserByEmailReposity = postgresGetUserByEmailReposity;
+    this.postgresUpdateUserRepository = postgresUpdateUserRepository;
+  }
   async execute(userId, updateUserParams) {
     if (updateUserParams.email) {
-      const postgresGetUserByEmailRepository =
-        new PostgresGetUserByEmailReposity();
       const userWithProvidedEmail =
-        await postgresGetUserByEmailRepository.execute(updateUserParams.email);
+        await this.postgresGetUserByEmailReposity.execute(
+          updateUserParams.email,
+        );
 
       console.log(userWithProvidedEmail);
       console.log(userId);
@@ -29,8 +30,7 @@ export class UpdateUserUseCase {
       user.password = hashedPassword;
     }
 
-    const postgresUpdateUserRepository = new PostgresUpdateUserRepository();
-    const updatedUser = await postgresUpdateUserRepository.execute(
+    const updatedUser = await this.postgresUpdateUserRepository.execute(
       userId,
       user,
     );

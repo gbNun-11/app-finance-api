@@ -124,6 +124,8 @@ class UserController {
       return responseStatusError(res, 500, "Internal server error");
     }
   }
+
+  async delete() {}
 }
 
 export default new UserController();

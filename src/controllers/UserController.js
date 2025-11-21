@@ -1,6 +1,3 @@
-import validator from "validator";
-
-import { GetUserByIdUseCase } from "../use-cases/getUserById.js";
 import { UpdateUserUseCase } from "../use-cases/updateUser.js";
 import { CreateUserUseCase } from "../use-cases/createUser.js";
 import { EmailAlreadyInUseError } from "../errors/user.js";
@@ -8,21 +5,18 @@ import {
   responseStatusError,
   responseStatusSuccess,
   columnsTableUsers,
+  validationUserId,
+  validationPassword,
+  validationEmail,
 } from "../helpers/http.js";
 
 class UserController {
   async show(req, res) {
     try {
       const userId = req.params.userId;
-      const isIdValid = validator.isUUID(userId);
 
-      if (!isIdValid)
-        return responseStatusError(res, 400, "The provider ID is not valid");
-
-      const getUserByIdUseCase = new GetUserByIdUseCase();
-      const user = await getUserByIdUseCase.execute(userId);
-
-      if (!user) return responseStatusError(res, 404, "User not found");
+      const user = await validationUserId(res, userId);
+      if (!user) return;
 
       return responseStatusSuccess(res, 200, user);
     } catch (e) {
@@ -35,15 +29,9 @@ class UserController {
     try {
       const userId = req.params.userId;
       const params = req.body;
-      const isIdValid = validator.isUUID(userId);
 
-      if (!isIdValid)
-        return responseStatusError(res, 400, "The provider ID is not valid");
-
-      const getUserByIdUseCase = new GetUserByIdUseCase();
-      const user = await getUserByIdUseCase.execute(userId);
-
-      if (!user) return responseStatusError(res, 404, "User not found.");
+      const user = await validationUserId(res, userId);
+      if (!user) return;
 
       const requiredFields = columnsTableUsers;
       const someFieldIsNotAllowed = Object.keys(params).some(
@@ -58,21 +46,13 @@ class UserController {
         );
 
       if (params.password) {
-        if (params.password.length < 6)
-          return responseStatusError(
-            res,
-            400,
-            "Password must be at least 6 characters",
-          );
+        const isValidationPassword = validationPassword(res, params.password);
+        if (!isValidationPassword) return;
       }
 
       if (params.email) {
-        if (!validator.isEmail(params.email))
-          return responseStatusError(
-            res,
-            400,
-            "Invalid e-mail. Please provide a valid one",
-          );
+        const isValidationEmail = validationEmail(res, params.email);
+        if (!isValidationEmail) return;
       }
 
       const updateUserUseCase = new UpdateUserUseCase();
@@ -98,19 +78,11 @@ class UserController {
           return responseStatusError(res, 400, `Missing param: ${field}`);
       }
 
-      if (params.password.length < 6)
-        return responseStatusError(
-          res,
-          400,
-          "Password must be at least 6 characters",
-        );
+      const isValidationPassword = validationPassword(res, params.password);
+      if (!isValidationPassword) return;
 
-      if (!validator.isEmail(params.email))
-        return responseStatusError(
-          res,
-          400,
-          "Invalid e-mail. Please provide a valid one",
-        );
+      const isValidationEmail = validationEmail(res, params.email);
+      if (!isValidationEmail) return;
 
       const createUserUseCase = new CreateUserUseCase();
       const createdUser = await createUserUseCase.execute(params);
@@ -125,7 +97,17 @@ class UserController {
     }
   }
 
-  async delete() {}
+  async delete(req, res) {
+    try {
+      const userId = req.params.userId;
+
+      const user = await validationUserId(res, userId);
+      if (!user) return;
+    } catch (e) {
+      console.error(e);
+      return responseStatusError(res, 500, "Internal server error");
+    }
+  }
 }
 
 export default new UserController();

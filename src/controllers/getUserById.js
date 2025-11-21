@@ -8,7 +8,7 @@ class GetUserByIdController {
 
       if (!isIdValid) {
         return res.status(400).json({
-          errorMessage: "The provided id is not valid",
+          errorMessage: "The provided ID is not valid",
         });
       }
 

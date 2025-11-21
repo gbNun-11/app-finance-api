@@ -1,5 +1,6 @@
 import { UpdateUserUseCase } from "../use-cases/updateUser.js";
 import { CreateUserUseCase } from "../use-cases/createUser.js";
+import { DeleteUserUseCase } from "../use-cases/deleteUser.js";
 import { EmailAlreadyInUseError } from "../errors/user.js";
 import {
   responseStatusError,
@@ -103,6 +104,11 @@ class UserController {
 
       const user = await validationUserId(res, userId);
       if (!user) return;
+
+      const deleteUserUseCase = new DeleteUserUseCase();
+      const deletedUser = await deleteUserUseCase.execute(userId);
+
+      return responseStatusSuccess(res, 200, deletedUser);
     } catch (e) {
       console.error(e);
       return responseStatusError(res, 500, "Internal server error");

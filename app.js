@@ -1,6 +1,7 @@
 import express from "express";
 
 import userRoutes from "./src/routes/user.js";
+import transactionRoutes from "./src/routes/transaction.js";
 
 class App {
   constructor() {
@@ -16,6 +17,7 @@ class App {
 
   routes() {
     this.app.use("/api/users", userRoutes);
+    this.app.use("/api/transaction", transactionRoutes);
   }
 }
 

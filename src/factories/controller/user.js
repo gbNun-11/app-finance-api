@@ -1,9 +1,9 @@
 // Repositorys
-import { PostgresGetUserByIdRepository } from "../../repositories/postgres/getUserById.js";
-import { PostgresGetUserByEmailReposity } from "../../repositories/postgres/getUserByEmail.js";
-import { PostgresUpdateUserRepository } from "../../repositories/postgres/updateUser.js";
-import { PostgresDeleteUserRepository } from "../../repositories/postgres/deleteUser.js";
-import { PostgresCreateUserRepository } from "../../repositories/postgres/createUser.js";
+import { PostgresGetUserByIdRepository } from "../../repositories/postgres/user/getUserById.js";
+import { PostgresGetUserByEmailReposity } from "../../repositories/postgres/user/getUserByEmail.js";
+import { PostgresUpdateUserRepository } from "../../repositories/postgres/user/updateUser.js";
+import { PostgresDeleteUserRepository } from "../../repositories/postgres/user/deleteUser.js";
+import { PostgresCreateUserRepository } from "../../repositories/postgres/user/createUser.js";
 // Use-Cases
 import { GetUserByIdUseCase } from "../../use-cases/getUserById.js";
 import { UpdateUserUseCase } from "../../use-cases/updateUser.js";

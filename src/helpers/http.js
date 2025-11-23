@@ -9,6 +9,14 @@ export class GetUserHelper {
     return ["first_name", "last_name", "email", "password"];
   }
 
+  columnsTableTransaction() {
+    return ["user_id", "name", "date", "amount", "type"];
+  }
+
+  typesTransaction() {
+    return ["EARNING", "EXPENSE", "INVESTMENT"];
+  }
+
   responseStatusError = (res, code, text) => {
     return res.status(code).json({
       errorMessage: text,
@@ -39,6 +47,30 @@ export class GetUserHelper {
         400,
         "Password must be at least 6 characters",
       );
+      return false;
+    }
+
+    return true;
+  }
+
+  validationAmount(res, amount) {
+    if (
+      !validator.isCurrency(amount.toString(), {
+        digits_after_decimal: [2],
+        allow_negatives: false,
+        decimal_separator: ".",
+      })
+    ) {
+      this.responseStatusError(
+        res,
+        400,
+        "The amount must be a valid currency.",
+      );
+      return false;
+    }
+
+    if (amount <= 0) {
+      this.responseStatusError(res, 400, "The amount must be greater than 0.");
       return false;
     }
 

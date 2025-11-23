@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { makeGetController } from "../factories/controller/user.js";
+import { makeGetUserController } from "../factories/controller/user.js";
 
 const router = new Router();
-const userController = makeGetController();
+const userController = makeGetUserController();
 
 // Routes
 router.get("/:userId", (req, res) => userController.show(req, res));

@@ -18,7 +18,7 @@ import { GetUserHelper } from "../../helpers/http.js";
 // Controllers
 import { UserController } from "../../controllers/UserController.js";
 
-export const makeGetController = () => {
+export const makeGetUserController = () => {
   // Repositorys
   const postgresGetUserByIdRepository = new PostgresGetUserByIdRepository();
   const postgresGetUserByEmailReposity = new PostgresGetUserByEmailReposity();

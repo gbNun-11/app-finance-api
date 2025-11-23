@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import bcrypt from "bcrypt";
-import { EmailAlreadyInUseError } from "../errors/user.js";
+import { EmailAlreadyInUseError } from "../../errors/user.js";
 
 export class CreateUserUseCase {
   constructor(postgresGetUserByEmailReposity, postgresCreateUserRepository) {

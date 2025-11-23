@@ -1,14 +1,18 @@
 // Repositorys
-import { PostgresGetUserByIdRepository } from "../../repositories/postgres/user/getUserById.js";
-import { PostgresGetUserByEmailReposity } from "../../repositories/postgres/user/getUserByEmail.js";
-import { PostgresUpdateUserRepository } from "../../repositories/postgres/user/updateUser.js";
-import { PostgresDeleteUserRepository } from "../../repositories/postgres/user/deleteUser.js";
-import { PostgresCreateUserRepository } from "../../repositories/postgres/user/createUser.js";
+import {
+  PostgresCreateUserRepository,
+  PostgresDeleteUserRepository,
+  PostgresUpdateUserRepository,
+  PostgresGetUserByEmailReposity,
+  PostgresGetUserByIdRepository,
+} from "../../repositories/postgres/user/index.js";
 // Use-Cases
-import { GetUserByIdUseCase } from "../../use-cases/getUserById.js";
-import { UpdateUserUseCase } from "../../use-cases/updateUser.js";
-import { DeleteUserUseCase } from "../../use-cases/deleteUser.js";
-import { CreateUserUseCase } from "../../use-cases/createUser.js";
+import {
+  GetUserByIdUseCase,
+  CreateUserUseCase,
+  DeleteUserUseCase,
+  UpdateUserUseCase,
+} from "../../use-cases/user/index.js";
 // Helpers
 import { GetUserHelper } from "../../helpers/http.js";
 // Controllers

@@ -48,12 +48,17 @@ export class GetUserHelper {
   async validationUserId(res, userId) {
     const isIdValid = validator.isUUID(userId);
 
-    if (!isIdValid)
-      return this.responseStatusError(res, 400, "The provider ID is not valid");
+    if (!isIdValid) {
+      this.responseStatusError(res, 400, "The provider ID is not valid");
+      return false;
+    }
 
     const user = await this.getUserByIdUseCase.execute(userId);
 
-    if (!user) return this.responseStatusError(res, 404, "User not found.");
+    if (!user) {
+      this.responseStatusError(res, 404, "User not found.");
+      return false;
+    }
 
     return user;
   }

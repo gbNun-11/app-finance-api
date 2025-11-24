@@ -6,11 +6,13 @@ export class UserController {
     updateUserUseCase,
     createUserUseCase,
     deleteUserUseCase,
+    getUserBalanceUseCase,
   ) {
     this.getUserHelper = getUserHelper;
     this.updateUserUseCase = updateUserUseCase;
     this.createUserUseCase = createUserUseCase;
     this.deleteUserUseCase = deleteUserUseCase;
+    this.getUserBalanceUseCase = getUserBalanceUseCase;
   }
   async show(req, res) {
     try {
@@ -20,6 +22,25 @@ export class UserController {
       if (!user) return;
 
       return this.getUserHelper.responseStatusSuccess(res, 200, user);
+    } catch (e) {
+      console.error(e);
+      return this.getUserHelper.responseStatusError(
+        res,
+        500,
+        "Internal server error.",
+      );
+    }
+  }
+
+  async index(req, res) {
+    try {
+      const userId = req.params.userId;
+
+      const user = await this.getUserHelper.validationUserId(res, userId);
+      if (!user) return;
+
+      const balanceUser = await this.getUserBalanceUseCase.execute(userId);
+      return this.getUserHelper.responseStatusSuccess(res, 200, balanceUser);
     } catch (e) {
       console.error(e);
       return this.getUserHelper.responseStatusError(

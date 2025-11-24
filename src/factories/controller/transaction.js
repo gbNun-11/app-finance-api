@@ -14,6 +14,7 @@ import {
   GetTransactionByUserIdUseCase,
   UpdateTransactionUseCase,
   GetTransactionByIdUseCase,
+  DeleteTransactionUseCase,
 } from "../../use-cases/index.js";
 // Helpers
 import { GetUserHelper } from "../../helpers/http.js";
@@ -49,8 +50,9 @@ export const makeGetTransactionController = () => {
   const getTransactionByIdUseCase = new GetTransactionByIdUseCase(
     postgresGetTransactionByIdRepository,
   );
-  const deleteTransactionUseCase = postgresDeleteTransactionRepository;
-  console.log(deleteTransactionUseCase);
+  const deleteTransactionUseCase = new DeleteTransactionUseCase(
+    postgresDeleteTransactionRepository,
+  );
   // Helpers
   const getUserHelper = new GetUserHelper(
     getUserByIdUseCase,
@@ -62,6 +64,7 @@ export const makeGetTransactionController = () => {
     createTransactionUseCase,
     getTransactionByUserIdUseCase,
     updateTransactionUseCase,
+    deleteTransactionUseCase,
   );
 
   return transactionController;

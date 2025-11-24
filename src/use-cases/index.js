@@ -7,3 +7,4 @@ export * from "./transaction/createTransaction.js";
 export * from "./transaction/getTransactionByUserId.js";
 export * from "./transaction/updateTransaction.js";
 export * from "./transaction/getTransactionId.js";
+export * from "./transaction/deleteTransaction.js";

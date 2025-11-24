@@ -4,11 +4,13 @@ export class TransactionController {
     createTransactionUseCase,
     getTransactionByUserIdUseCase,
     updateTransactionUseCase,
+    deleteTransactionUseCase,
   ) {
     this.getUserHelper = getUserHelper;
     this.createTransactionUseCase = createTransactionUseCase;
     this.getTransactionByUserIdUseCase = getTransactionByUserIdUseCase;
     this.updateTransactionUseCase = updateTransactionUseCase;
+    this.deleteTransactionUseCase = deleteTransactionUseCase;
   }
   async show(req, res) {
     try {
@@ -135,6 +137,34 @@ export class TransactionController {
         res,
         201,
         createdTransaction,
+      );
+    } catch (e) {
+      console.error(e);
+      return this.getUserHelper.responseStatusError(
+        res,
+        500,
+        "Internal server error",
+      );
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      const userId = req.params.transactionId;
+
+      const user = await this.getUserHelper.validationTransactionId(
+        res,
+        userId,
+      );
+      if (!user) return;
+
+      const deletedTransaction =
+        await this.deleteTransactionUseCase.execute(userId);
+
+      return this.getUserHelper.responseStatusSuccess(
+        res,
+        200,
+        deletedTransaction,
       );
     } catch (e) {
       console.error(e);

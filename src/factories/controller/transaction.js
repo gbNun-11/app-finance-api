@@ -34,6 +34,7 @@ export const makeGetTransactionController = () => {
     new PostgresGetTransactionByIdRepository();
   const postgresDeleteTransactionRepository =
     new PostgresDeleteTransactionRepository();
+
   // Use-Cases
   const getUserByIdUseCase = new GetUserByIdUseCase(
     postgresGetUserByIdRepository,
@@ -53,11 +54,13 @@ export const makeGetTransactionController = () => {
   const deleteTransactionUseCase = new DeleteTransactionUseCase(
     postgresDeleteTransactionRepository,
   );
+
   // Helpers
   const getUserHelper = new GetUserHelper(
     getUserByIdUseCase,
     getTransactionByIdUseCase,
   );
+
   // Controllers
   const transactionController = new TransactionController(
     getUserHelper,

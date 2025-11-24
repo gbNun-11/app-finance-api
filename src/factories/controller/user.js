@@ -5,6 +5,7 @@ import {
   PostgresUpdateUserRepository,
   PostgresGetUserByEmailReposity,
   PostgresGetUserByIdRepository,
+  // PostgresGetUserBalanceRepository,
 } from "../../repositories/postgres/index.js";
 // Use-Cases
 import {
@@ -39,6 +40,8 @@ export const makeGetUserController = () => {
     postgresGetUserByEmailReposity,
     postgresCreateUserRepository,
   );
+  // const postgresGetUserBalanceRepository =
+  //   new PostgresGetUserBalanceRepository();
 
   // Helpers
   const getUserHelper = new GetUserHelper(getUserByIdUseCase);

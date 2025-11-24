@@ -5,7 +5,7 @@ import {
   PostgresUpdateUserRepository,
   PostgresGetUserByEmailReposity,
   PostgresGetUserByIdRepository,
-  // PostgresGetUserBalanceRepository,
+  PostgresGetUserBalanceRepository,
 } from "../../repositories/postgres/index.js";
 // Use-Cases
 import {
@@ -13,6 +13,7 @@ import {
   CreateUserUseCase,
   DeleteUserUseCase,
   UpdateUserUseCase,
+  GetUserBalanceUseCase,
 } from "../../use-cases/index.js";
 // Helpers
 import { GetUserHelper } from "../../helpers/http.js";
@@ -26,6 +27,8 @@ export const makeGetUserController = () => {
   const postgresUpdateUserRepository = new PostgresUpdateUserRepository();
   const postgresDeleteUserRepository = new PostgresDeleteUserRepository();
   const postgresCreateUserRepository = new PostgresCreateUserRepository();
+  const postgresGetUserBalanceRepository =
+    new PostgresGetUserBalanceRepository();
 
   // Use-Cases
   const getUserByIdUseCase = new GetUserByIdUseCase(
@@ -40,8 +43,9 @@ export const makeGetUserController = () => {
     postgresGetUserByEmailReposity,
     postgresCreateUserRepository,
   );
-  // const postgresGetUserBalanceRepository =
-  //   new PostgresGetUserBalanceRepository();
+  const getUserBalanceUseCase = new GetUserBalanceUseCase(
+    postgresGetUserBalanceRepository,
+  );
 
   // Helpers
   const getUserHelper = new GetUserHelper(getUserByIdUseCase);
@@ -52,6 +56,7 @@ export const makeGetUserController = () => {
     updateUserUseCase,
     createUserUseCase,
     deleteUserUseCase,
+    getUserBalanceUseCase,
   );
 
   return userController;

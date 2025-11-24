@@ -1,9 +1,13 @@
 // Repositorys
-import { PostgresGetUserByIdRepository } from "../../repositories/postgres/user/index.js";
-import { PostgresCreateTransactionRepository } from "../../repositories/postgres/transaction/index.js";
+import {
+  PostgresGetUserByIdRepository,
+  PostgresCreateTransactionRepository,
+} from "../../repositories/postgres/index.js";
 // Use-Cases
-import { GetUserByIdUseCase } from "../../use-cases/user/index.js";
-import { CreateTransactionUseCase } from "../../use-cases/transaction/index.js";
+import {
+  GetUserByIdUseCase,
+  CreateTransactionUseCase,
+} from "../../use-cases/index.js";
 // Helpers
 import { GetUserHelper } from "../../helpers/http.js";
 // Controllers

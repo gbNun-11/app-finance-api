@@ -5,14 +5,14 @@ import {
   PostgresUpdateUserRepository,
   PostgresGetUserByEmailReposity,
   PostgresGetUserByIdRepository,
-} from "../../repositories/postgres/user/index.js";
+} from "../../repositories/postgres/index.js";
 // Use-Cases
 import {
   GetUserByIdUseCase,
   CreateUserUseCase,
   DeleteUserUseCase,
   UpdateUserUseCase,
-} from "../../use-cases/user/index.js";
+} from "../../use-cases/index.js";
 // Helpers
 import { GetUserHelper } from "../../helpers/http.js";
 // Controllers

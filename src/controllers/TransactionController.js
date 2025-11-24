@@ -13,14 +13,12 @@ export class TransactionController {
 
       const requiredFields = this.getUserHelper.columnsTableTransaction();
 
-      for (const field of requiredFields) {
-        if (!params[field] || params[field].toString().trim().length === 0)
-          return this.getUserHelper.responseStatusError(
-            res,
-            400,
-            `Missing param: ${field}`,
-          );
-      }
+      const validatFields = this.getUserHelper.validatRequiredFields(
+        res,
+        params,
+        requiredFields,
+      );
+      if (!validatFields) return;
 
       const type = params.type.trim().toUpperCase();
       const typesTransaction = this.getUserHelper.typesTransaction();

@@ -94,4 +94,31 @@ export class GetUserHelper {
 
     return user;
   }
+
+  validatRequiredFields(res, params, requiredFields) {
+    for (const field of requiredFields) {
+      const value = params[field];
+
+      if (value === undefined || value === null) {
+        this.responseStatusError(res, 400, `Missing param: ${field}`);
+        return false;
+      }
+
+      if (typeof value === "string") {
+        if (validator.isEmpty(value.trim())) {
+          this.responseStatusError(res, 400, `Missing param: ${field}`);
+          return false;
+        }
+      }
+
+      if (typeof value === "number") {
+        if (Number.isNaN(value)) {
+          this.responseStatusError(res, 400, `Invalid numeric param: ${field}`);
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
 }

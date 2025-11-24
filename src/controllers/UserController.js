@@ -87,14 +87,12 @@ export class UserController {
       const params = req.body;
       const requiredFields = this.getUserHelper.columnsTableUsers();
 
-      for (const field of requiredFields) {
-        if (!params[field] || params[field].trim().length === 0)
-          return this.getUserHelper.responseStatusError(
-            res,
-            400,
-            `Missing param: ${field}`,
-          );
-      }
+      const validatFields = this.getUserHelper.validatRequiredFields(
+        res,
+        params,
+        requiredFields,
+      );
+      if (!validatFields) return;
 
       const isValidationPassword = this.getUserHelper.validationPassword(
         res,

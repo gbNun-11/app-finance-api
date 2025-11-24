@@ -54,8 +54,18 @@ export class GetUserHelper {
   }
 
   validationAmount(res, amount) {
+    if (typeof amount !== "number") {
+      this.responseStatusError(res, 400, "The type amount must be number.");
+      return false;
+    }
+
+    if (amount <= 0) {
+      this.responseStatusError(res, 400, "The amount must be greater than 0.");
+      return false;
+    }
+
     if (
-      !validator.isCurrency(amount.toString(), {
+      !validator.isCurrency(amount.toFixed(2), {
         digits_after_decimal: [2],
         allow_negatives: false,
         decimal_separator: ".",
@@ -66,11 +76,6 @@ export class GetUserHelper {
         400,
         "The amount must be a valid currency.",
       );
-      return false;
-    }
-
-    if (amount <= 0) {
-      this.responseStatusError(res, 400, "The amount must be greater than 0.");
       return false;
     }
 

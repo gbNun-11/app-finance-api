@@ -7,6 +7,6 @@ export class PostgresGetTransactionByUserIdRepository {
       [userId],
     );
 
-    return transactions.rows[0];
+    return transactions.rows;
   }
 }

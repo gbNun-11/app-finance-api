@@ -1,7 +1,32 @@
 export class TransactionController {
-  constructor(getUserHelper, createTransactionUseCase) {
+  constructor(
+    getUserHelper,
+    createTransactionUseCase,
+    getTransactionByUserIdUseCase,
+  ) {
     this.getUserHelper = getUserHelper;
     this.createTransactionUseCase = createTransactionUseCase;
+    this.getTransactionByUserIdUseCase = getTransactionByUserIdUseCase;
+  }
+  async show(req, res) {
+    try {
+      const userId = req.query.userId;
+
+      const user = await this.getUserHelper.validationUserId(res, userId);
+      if (!user) return;
+
+      const transactions = await this.getTransactionByUserIdUseCase.execute({
+        userId,
+      });
+      return this.getUserHelper.responseStatusSuccess(res, 200, transactions);
+    } catch (e) {
+      console.error(e);
+      return this.getUserHelper.responseStatusError(
+        res,
+        500,
+        "Internal server error",
+      );
+    }
   }
   async store(req, res) {
     try {

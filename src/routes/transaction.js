@@ -4,6 +4,7 @@ import { makeGetTransactionController } from "../factories/controller/transactio
 const router = new Router();
 const transactionController = makeGetTransactionController();
 
+router.get("/", (req, res) => transactionController.show(req, res));
 router.post("/", (req, res) => transactionController.store(req, res));
 
 export default router;

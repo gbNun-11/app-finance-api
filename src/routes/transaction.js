@@ -8,6 +8,7 @@ router.get("/", (req, res) => transactionController.show(req, res));
 router.patch("/:transactionId", (req, res) =>
   transactionController.update(req, res),
 );
+router.delete("/:userId", (req, res) => transactionController.delete(req, res));
 router.post("/", (req, res) => transactionController.store(req, res));
 
 export default router;

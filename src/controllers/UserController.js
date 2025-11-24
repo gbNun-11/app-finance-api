@@ -33,6 +33,9 @@ export class UserController {
   async update(req, res) {
     try {
       const params = req.body;
+      const fieldsBody = this.getUserHelper.validateFieldsNull(res, params);
+
+      if (!fieldsBody) return;
       const userId = req.params.userId;
 
       const user = await this.getUserHelper.validationUserId(res, userId);

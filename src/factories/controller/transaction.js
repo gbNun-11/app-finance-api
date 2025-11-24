@@ -3,12 +3,16 @@ import {
   PostgresGetUserByIdRepository,
   PostgresCreateTransactionRepository,
   PostgresGetTransactionByUserIdRepository,
+  PostgresUpdateTransactionRepository,
+  PostgresGetTransactionByIdRepository,
 } from "../../repositories/postgres/index.js";
 // Use-Cases
 import {
   GetUserByIdUseCase,
   CreateTransactionUseCase,
   GetTransactionByUserIdUseCase,
+  UpdateTransactionUseCase,
+  GetTransactionByIdUseCase,
 } from "../../use-cases/index.js";
 // Helpers
 import { GetUserHelper } from "../../helpers/http.js";
@@ -22,6 +26,10 @@ export const makeGetTransactionController = () => {
     new PostgresCreateTransactionRepository();
   const postgresGetTransactionByUserIdRepository =
     new PostgresGetTransactionByUserIdRepository();
+  const postgresUpdateTransactionRepository =
+    new PostgresUpdateTransactionRepository();
+  const postgresGetTransactionByIdRepository =
+    new PostgresGetTransactionByIdRepository();
   // Use-Cases
   const getUserByIdUseCase = new GetUserByIdUseCase(
     postgresGetUserByIdRepository,
@@ -32,13 +40,23 @@ export const makeGetTransactionController = () => {
   const getTransactionByUserIdUseCase = new GetTransactionByUserIdUseCase(
     postgresGetTransactionByUserIdRepository,
   );
+  const updateTransactionUseCase = new UpdateTransactionUseCase(
+    postgresUpdateTransactionRepository,
+  );
+  const getTransactionByIdUseCase = new GetTransactionByIdUseCase(
+    postgresGetTransactionByIdRepository,
+  );
   // Helpers
-  const getUserHelper = new GetUserHelper(getUserByIdUseCase);
+  const getUserHelper = new GetUserHelper(
+    getUserByIdUseCase,
+    getTransactionByIdUseCase,
+  );
   // Controllers
   const transactionController = new TransactionController(
     getUserHelper,
     createTransactionUseCase,
     getTransactionByUserIdUseCase,
+    updateTransactionUseCase,
   );
 
   return transactionController;

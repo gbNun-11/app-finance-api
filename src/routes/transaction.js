@@ -5,6 +5,9 @@ const router = new Router();
 const transactionController = makeGetTransactionController();
 
 router.get("/", (req, res) => transactionController.show(req, res));
+router.patch("/:transactionId", (req, res) =>
+  transactionController.update(req, res),
+);
 router.post("/", (req, res) => transactionController.store(req, res));
 
 export default router;

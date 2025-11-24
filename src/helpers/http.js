@@ -1,8 +1,9 @@
 import validator from "validator";
 
 export class GetUserHelper {
-  constructor(getUserByIdUseCase) {
+  constructor(getUserByIdUseCase, getTransactionByIdUseCase) {
     this.getUserByIdUseCase = getUserByIdUseCase;
+    this.getTransactionByIdUseCase = getTransactionByIdUseCase;
   }
 
   columnsTableUsers() {
@@ -11,6 +12,10 @@ export class GetUserHelper {
 
   columnsTableTransaction() {
     return ["user_id", "name", "date", "amount", "type"];
+  }
+
+  columnsTableTransactionUpdate() {
+    return ["name", "date", "amount", "type"];
   }
 
   typesTransaction() {
@@ -82,6 +87,24 @@ export class GetUserHelper {
     return true;
   }
 
+  async validationTransactionId(res, id) {
+    const isIdValid = validator.isUUID(id);
+
+    if (!isIdValid) {
+      this.responseStatusError(res, 400, "The provider ID is not valid");
+      return false;
+    }
+
+    const transaction = await this.getTransactionByIdUseCase.execute(id);
+
+    if (!transaction) {
+      this.responseStatusError(res, 404, "Transaction not found.");
+      return false;
+    }
+
+    return transaction;
+  }
+
   async validationUserId(res, userId) {
     const isIdValid = validator.isUUID(userId);
 
@@ -125,5 +148,41 @@ export class GetUserHelper {
     }
 
     return true;
+  }
+
+  validateFieldsNull(res, params) {
+    if (Object.keys(params).length === 0) {
+      this.responseStatusError(
+        res,
+        400,
+        "At least one field must be provided to update the transaction",
+      );
+      return false;
+    }
+    return true;
+  }
+
+  validationTypeParams(res, type) {
+    if (typeof type !== "string") {
+      this.responseStatusError(
+        res,
+        400,
+        "The type must be EARNING, EXPENSE or INVESTMENT.",
+      );
+      return false;
+    }
+    const types = type.trim().toUpperCase();
+    const allowedTypes = this.typesTransaction();
+
+    if (!allowedTypes.includes(types)) {
+      this.responseStatusError(
+        res,
+        400,
+        "The type must be EARNING, EXPENSE or INVESTMENT",
+      );
+      return false;
+    }
+
+    return types;
   }
 }
